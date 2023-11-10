@@ -1,5 +1,17 @@
 function radial_hist(beta, label, colorstr, pltflg)
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -Description-
+%Plot radial histogram of beta
+%
+% -Input- 
+%beta: stimulation locations during the heart beat (R-peak == 0°) 
+%label: stimulation protocol label (1=non-syn, 2=sys-syn, 3=dia-sync) 
+%colorstr: colors related to the labels 
+%pltflg: 1: plot figure; 0: no 
+%
+% -Output- 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if pltflg == 1
     figure()
     for j = 3:-1:1 
