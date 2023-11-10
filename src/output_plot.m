@@ -58,7 +58,6 @@ plot(t_signal,maf,'DisplayName','Moving Average')
 plot(t_signal(seg.begIn),maf(seg.begIn),'g*','DisplayName','Inspiration')
 plot(t_signal(seg.begEx),maf(seg.begEx),'r*','DisplayName','Expiration')
 legend show
-
 %% PLOT Histogram of stimulation and normalized ECG 
 nshift = round(300/360 * length(prc(1,:))); 
 colMeans = circshift(colMeans,nshift); 
@@ -74,11 +73,13 @@ x1 = rescale(x1,60,420);
 beta = rescale(cell2mat(beta),60,420); 
 label = cell2mat(label); 
 colorstr = ["k","b","r"]; 
-% all in one 
+
+%% PLOT radial histogram of stimulation time point (cnt of normalized angle beta)   
+radial_hist(beta, label, colorstr, 1)
+
+%% all in one 
 figure()
-sgtitle(['Normalized ECG and Stimulation location.' ...
-    'Delay between Stimulation and ECG measurement is not considered yet.'] ...
-    ,'color','red')
+sgtitle('Normalized ECG and Stimulation location')
 subplot(2,2,1)
 yyaxis left
 plot(x1,colMeans,'k','LineWidth',2,'DisplayName','Mean')
