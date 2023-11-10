@@ -1,11 +1,23 @@
 function [] = output_plot(raw,rpeaks,win_stim,maf,seg,edges,Fs,x1,prc,colMeans,beta,label,stimstr)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% -Description-
+% Hodgepodge of all Plots and plot functions. Only minor changes related to
+% visualization of the data 
+% 
+% -Input- 
+% 
+%
+% -Output- 
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 L=length(raw.data(:,2)); 
 t_signal = ((0:L-1)/Fs)';%time vector
 resp=raw.data(:,1);
 ECG=-raw.data(:,2); 
 stim=raw.data(:,4); 
 %% Visualize the Stimulation 
-% random range 
+% visualize only a range (a,b) 
 a = 255; 
 b = a + 5; 
 
