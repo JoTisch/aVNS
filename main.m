@@ -11,7 +11,7 @@
 
 clear all; close all; clc; 
 
-patient_id=1;  
+patient_id=3;  
 addpath './Data'; 
 addpath './src'; 
 addpath './src/analyse_ecg'; 
@@ -155,27 +155,9 @@ q=3;%Hz
 %                           Adaptive Filter                               %
 %                                                                         %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-af_respRR= adapt_filt(seg.begIn,resp_tR,t_signal,resp_RR,meanF,q); 
-af_stimRR= adapt_filt(seg.begIn,stim_tR,t_signal,stim_RR,meanF,q); 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                                         %
-%                                OUTPUT                                   %
-%                                                                         %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% --- Data Overview ---
-output_plot(raw,rpeaks, win_stim,maf,seg,edges,fs,x1,prc,colMeans,beta,label,stimstr); 
-
-%- Raw Signal Stimulation -
-fit_IE(stim_alpha, stimRR, class,stimstr(stim_flag),60)
-RdR_fit(stim_alpha, stimRR, class,1,60,0) 
-RdR_fit(stim_alpha, stimRR, stimstr(stim_flag),1,60,1)
-
-%--- Mean Filter Stimulation ----
-RdR_fit(stim_alpha, mf_stimRR, class,1,60,0) 
-RdR_fit(stim_alpha, mf_stimRR, stimstr(stim_flag),1,60,1) 
-
-%--- Adaptive Filter Stimulation ---
-RdR_fit(stim_alpha, af_stimRR, stimstr(stim_flag),1,60,1)
+af_respRR= adapt_filt(seg.begIn,resp_tR,t_signal,respRR,meanF,q); 
+af_stimRR= adapt_filt(seg.begIn,stim_tR,t_signal,stimRR,meanF,q); 
 
 % SAVE for further investigations 
-save(['Patient',num2str(k),'.mat'],"stim_alpha","stimRR","filt_stimRR","af_stimRR","stim_flag")
+save(['./src/out/Patient',num2str(patient_id),'.mat'],"stim_alpha","stimRR","mf_stimRR","af_stimRR","stim_flag")
+
