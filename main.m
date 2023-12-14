@@ -42,7 +42,7 @@ win_ptcl=window_function(s(1,:),2,fs);
 win_ptcl.beg=(win_ptcl.beg/2) * fs; 
 edges=[1,win_ptcl.beg,length(stim)]; 
   
-% Mark the data 
+% Label the data 
 stimstr=["Non-sync aVNS", "Systole-sync aVNS", "Diastole-sync aVNS"]; 
 sflag(edges(1):max(edges),1)=1; 
 sflag(edges(2):edges(3),1)=2;
@@ -54,7 +54,7 @@ sflag(edges(6):edges(7),1)=2;
 end 
 stim_flag=sflag(win_stim.beg);
 
-[stim_RR,stim_alpha,stim_tR,stim_flag,win_stim.beg]=initRR(win_stim.beg, ...
+[stimRR,stim_alpha,stim_tR,stim_flag,win_stim.beg]=initRR(win_stim.beg, ...
                                                    rpeaks, ...
                                                    t_signal, ...
                                                    stim_flag); 
@@ -123,7 +123,7 @@ resp_flag(length(seg.begEx)+1:2*length(seg.begEx),1)="Inspiration";
 [start_InEx,I]=sort([seg.begEx, seg.begIn]); 
 resp_flag=resp_flag(I); 
 
-[resp_RR,resp_alpha,resp_tR,resp_flag,start_InEx]=initRR(start_InEx,...
+[respRR,resp_alpha,resp_tR,resp_flag,start_InEx]=initRR(start_InEx,...
                                                 rpeaks,...
                                                 t_signal,...
                                                 resp_flag); 
@@ -148,8 +148,8 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 meanF=meanfreq(resp,fs);
 q=3;%Hz
-[filt_respRR,~]=RR_filt(resp_tR,resp_RR,meanF,q); 
-[filt_stimRR,~]=RR_filt(stim_tR,stim_RR,meanF,q); 
+[mf_respRR,~]=RR_filt(resp_tR,respRR,meanF,q); 
+[mf_stimRR,~]=RR_filt(stim_tR,stimRR,meanF,q); 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                                                                         %
 %                           Adaptive Filter                               %
@@ -166,17 +166,16 @@ af_stimRR= adapt_filt(seg.begIn,stim_tR,t_signal,stim_RR,meanF,q);
 output_plot(raw,rpeaks, win_stim,maf,seg,edges,fs,x1,prc,colMeans,beta,label,stimstr); 
 
 %- Raw Signal Stimulation -
-fit_IE(stim_alpha, stim_RR, class,stimstr(stim_flag),60)
-RdR_fit(stim_alpha, stim_RR, class,1,60,0) 
-RdR_fit(stim_alpha, stim_RR, stimstr(stim_flag),1,60,1)
+fit_IE(stim_alpha, stimRR, class,stimstr(stim_flag),60)
+RdR_fit(stim_alpha, stimRR, class,1,60,0) 
+RdR_fit(stim_alpha, stimRR, stimstr(stim_flag),1,60,1)
 
 %--- Mean Filter Stimulation ----
-RdR_fit(stim_alpha, filt_stimRR, class,1,60,0) 
-RdR_fit(stim_alpha, filt_stimRR, stimstr(stim_flag),1,60,1) 
+RdR_fit(stim_alpha, mf_stimRR, class,1,60,0) 
+RdR_fit(stim_alpha, mf_stimRR, stimstr(stim_flag),1,60,1) 
 
 %--- Adaptive Filter Stimulation ---
 RdR_fit(stim_alpha, af_stimRR, stimstr(stim_flag),1,60,1)
 
-
 % SAVE for further investigations 
-save(['Patient',num2str(k),'.mat'],"stim_alpha","stim_RR","stim_flag","af_stimRR")
+save(['Patient',num2str(k),'.mat'],"stim_alpha","stimRR","filt_stimRR","af_stimRR","stim_flag")
