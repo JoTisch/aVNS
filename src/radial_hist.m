@@ -1,4 +1,4 @@
-function radial_hist(beta, label, colorstr, pltflg)
+function radial_hist(beta, label, colorstr, stimstr, pltflg)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % -Description-
 %Plot radial histogram of beta
@@ -38,7 +38,7 @@ if pltflg == 1
     polarAxs.MinorGridColor = 'k';
     polarAxs.MinorGridAlpha = 0.5;
     % add legend 
-    legend('systole-sync aVNS','diastole-sync aVNS','non-sync aVNS','FontSize',12)
+    legend(stimstr,'FontSize',12)
 end 
 
     

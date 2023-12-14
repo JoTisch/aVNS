@@ -70,7 +70,7 @@ plot(t_signal,maf,'DisplayName','Moving Average')
 plot(t_signal(seg.begIn),maf(seg.begIn),'g*','DisplayName','Inspiration')
 plot(t_signal(seg.begEx),maf(seg.begEx),'r*','DisplayName','Expiration')
 legend show
-%% PLOT Histogram of stimulation and normalized ECG 
+%% 
 nshift = round(300/360 * length(prc(1,:))); 
 colMeans = circshift(colMeans,nshift); 
 prc(1,:) = circshift(prc(1,:),nshift);
@@ -87,40 +87,32 @@ label = cell2mat(label);
 colorstr = ["k","b","r"]; 
 
 %% PLOT radial histogram of stimulation time point (cnt of normalized angle beta)   
-radial_hist(beta, label, colorstr, 1)
+radial_hist(beta, label, colorstr, stimstr, 1)
 
-%% all in one 
+%% PLOT Histogram of stimulation and normalized ECG 
+menwo = beta; 
 figure()
-sgtitle('Normalized ECG and Stimulation location')
-subplot(2,2,1)
 yyaxis left
-plot(x1,colMeans,'k','LineWidth',2,'DisplayName','Mean')
-hold on
 plot(x1,prc(1,:),'b--','DisplayName','25')
-plot(x1,prc(2,:),'b:','DisplayName','75')
+plot(x1,prc(2,:),'b--','DisplayName','75')
+patch([x1 fliplr(x1)], [prc(1,:) fliplr(prc(2,:))],'g','FaceAlpha',0.2,'FaceColor',[0.3010 0.7450 0.9330])
+hold on
+plot(x1,colMeans,'k','LineWidth',2,'DisplayName','Mean')
+ylabel('$u_{ECG} (mV)$','interpreter','latex')
 yyaxis right
+ylabel('$p$','interpreter','latex')
 for j = 1:3
 h = histogram(beta(label==j),'BinWidth',11.7, ... 
-  'DisplayName',stimstr(j),'FaceColor',colorstr(j)); 
+  'DisplayName',stimstr(j),'FaceColor',colorstr(j),'Normalization','pdf');
+%
+pd = fitdist(menwo(label==j),'kernel');
+xgrid = linspace(60,420,500)';
+pdfEst = pdf(pd,xgrid);
+line(xgrid,pdfEst,'LineWidth',2,'Color',colorstr(j))
+%
 title(['Total stimulations:',num2str(length(beta))])
-xlabel('$deg [^\circ]$','interpreter','latex')
+xlabel('$\alpha [^\circ]$','interpreter','latex')
 alpha(h,.2)
 end 
 grid minor
 legend('Location','north')
-% single plots 
-for j = 1:3
-subplot(2,2,j+1)
-yyaxis left
-plot(x1,colMeans,'k','LineWidth',2,'DisplayName','Mean')
-hold on
-plot(x1,prc(1,:),'b--','DisplayName','25')
-plot(x1,prc(2,:),'b:','DisplayName','75')
-yyaxis right
-histogram(beta(label==j),'BinWidth',11.7, ... 
-  'DisplayName',stimstr(j),'FaceColor',colorstr(j)) 
-title(['Total stimulations:',num2str(length(beta(label==j)))])
-grid minor
-legend('Location','north')
-end
-

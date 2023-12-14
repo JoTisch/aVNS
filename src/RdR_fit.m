@@ -59,18 +59,18 @@ if pltflag == 1
     else 
         colorstr = ["r","k","b"]; 
     end 
-    figure 
-    hp1 = uipanel('position',[0 .5 .5 .5]);
-    hp2 = uipanel('position',[0 0 .5 .5]);
-    hp3 = uipanel('position',[.5 .5 .5 .5]);
-    hp4 = uipanel('position',[0.5 0 .5 .5]);
-    hp = {hp1; hp2; hp3; hp4}; 
+%       figure()
+%     hp1 = uipanel('position',[0 .5 .5 .5]);
+%     hp2 = uipanel('position',[0 0 .5 .5]);
+%     hp3 = uipanel('position',[.5 .5 .5 .5]);
+%     hp4 = uipanel('position',[.5 0 .5 .5]);
+%     hp = {hp1; hp2; hp3; hp4}; 
     g = findgroups(groupflag); 
     for k = 1:4
-        %
+        figure() % delete
         s = scatterhist(alpha,((RR{k+1,:} ./ RR{1,:}) -1 )* 100,'NBins',[30 20], ...
             'Color','kbr', 'LineStyle',{'-','-.',':'},'Marker','+od','Style','bar', ...
-            'Parent',hp{k},'Group',groupflag,'Direction','in');
+            'Group',groupflag,'Direction','in'); % 'parent', hp{k},
         %
         for j=1:length(unique(g))
          cla(s(2))
@@ -78,11 +78,12 @@ if pltflag == 1
          hold(s(2),'on')
          hold(s(3),'on')
          arrayfun(@(j)histogram(s(2),alpha(g==j),'BinWidth',11.7,'FaceColor',...
-             colorstr(j),'Normalization','probability'),unique(g))
+             colorstr(j),'Normalization','pdf'),unique(g))
         end 
         %
         boxplot(s(3),((RR{k+1,:} ./ RR{1,:}) -1 )* 100,groupflag,'orientation','horizontal',...
              'label', repmat({''},length(unique(groupflag)),1),'color','kbr');
+
         %
         axis(s(2:3),'tight')
         axis(s(2:3),'on')
@@ -106,12 +107,12 @@ if pltflag == 1
         set(h3,'Color','m','LineStyle','--','LineWidth',2,'DisplayName',sprintf("Non-sync: m=%4.2f",nfit{k,:}.p1))
         end 
         %
-        title(['$\Delta RR = \frac{RR_{\mathrm{i+',num2str(k),'}} - RR_{\mathrm{i}}}{RR_{\mathrm{i}}} \cdot 100$'],'Interpreter','latex')
+        legend('off')
         xlim(x_lim)
         ylim([-30,30])
         ylim(s(3),[0,4])
-        xlabel('$deg (^\circ)$','interpreter','latex'); 
-        ylabel('$\Delta RR \; \mathrm{(rel. units)}$','interpreter','latex');
+        xlabel('$\alpha (^\circ)$','interpreter','latex'); 
+        ylabel(['$\Delta RR_{\mathrm{i+',num2str(k),'}} \, (\%)$'],'interpreter','latex');
     end 
 end 
 end
